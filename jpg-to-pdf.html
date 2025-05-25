@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JPG to PDF Converter</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: rgba(0,0,0,0.2) url('your-blur-ad-background.jpg') center center/cover no-repeat;
+    }
+    header {
+      background: #2196f3;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 1.2rem;
+    }
+    .banner-ad {
+      background: yellow;
+      color: black;
+      text-align: center;
+      padding: 5px;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 10px gray;
+      text-align: center;
+    }
+    .footer-ad {
+      background: yellow;
+      color: black;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    #popupAd {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #popupAdContent {
+      background: white;
+      padding: 20px;
+      width: 75%;
+      height: 75%;
+      text-align: center;
+      position: relative;
+    }
+    #popupAdContent button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .brought-by {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: gray;
+    }
+    #videoAd {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-ad">Top Banner Ad (Replace this)</div>
+  <header>JPG to PDF Converter</header>
+
+  <div class="container">
+    <h2>Select JPG File</h2>
+    <input type="file" id="fileInput" accept="image/jpeg" />
+    <button onclick="generatePDF()">Generate PDF</button>
+
+    <div id="videoAd">
+      <video width="100%" controls autoplay muted>
+        <source src="your-video-ad.mp4" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+    </div>
+
+    <div class="result" id="result"></div>
+    <div class="brought-by">Brought to you by Your Brand</div>
+  </div>
+
+  <div class="footer-ad">Footer Ad (Replace this)</div>
+
+  <div id="popupAd">
+    <div id="popupAdContent">
+      <button onclick="closePopup()">X</button>
+      <h2>Popup Ad</h2>
+      <p>Your ad content here...</p>
+    </div>
+  </div>
+
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    function closePopup() {
+      document.getElementById('popupAd').style.display = 'none';
+    }
+
+    function generatePDF() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select a JPG file.");
+        return;
+      }
+
+      // Show video ad
+      const videoAd = document.getElementById('videoAd');
+      videoAd.style.display = 'block';
+
+      // Wait for 5 seconds before generating PDF
+      setTimeout(() => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgData = e.target.result;
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF();
+          pdf.addImage(imgData, 'JPEG', 15, 40, 180, 160);
+          pdf.save('converted.pdf');
+          videoAd.style.display = 'none';
+          document.getElementById('result').innerHTML = '<p>PDF Generated! Check your downloads.</p>';
+        };
+        reader.readAsDataURL(file);
+      }, 5000); // Delay of 5 sec for video ad
+    }
+  </script>
+</body>
+</html>

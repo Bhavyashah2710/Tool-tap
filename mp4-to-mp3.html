@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MP4 to MP3 Converter</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 50px 20px 80px 20px; 
+      background: #f0f8ff; 
+      position: relative; 
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: 60px; /* for banner */
+      padding-bottom: 60px; /* for footer */
+    }
+    input, button { 
+      padding: 10px; 
+      margin: 10px; 
+      font-size: 1rem;
+    }
+    #result a { 
+      display: block; 
+      margin-top: 20px; 
+      font-weight: bold; 
+      color: green; 
+    }
+    /* Banner Ad */
+    .banner-ad {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 60px;
+      background: orange;
+      color: white;
+      font-weight: bold;
+      line-height: 60px;
+      z-index: 10000;
+      text-align: center;
+      font-size: 20px;
+      user-select: none;
+    }
+    /* Footer Ad */
+    .footer-ad {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 60px;
+      background: green;
+      color: white;
+      font-weight: bold;
+      line-height: 60px;
+      z-index: 10000;
+      text-align: center;
+      font-size: 20px;
+      user-select: none;
+    }
+    /* Popup overlay common */
+    .popup-ad {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: none; /* hide by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 11000;
+    }
+    .popup-content {
+      background: white;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      height: 75%;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 20px;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+    }
+    .close-btn:hover {
+      color: red;
+    }
+    video {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 10px;
+    }
+    .brought-by {
+      font-size: 14px;
+      color: grey;
+      margin-top: 20px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner-ad">This is a Banner Ad</div>
+
+  <!-- Popup on page load -->
+  <div class="popup-ad" id="pageLoadPopup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePageLoadPopup()">×</span>
+      <p>This is your popup ad on page load!</p>
+    </div>
+  </div>
+
+  <!-- Popup with video on convert -->
+  <div class="popup-ad" id="videoPopup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closeVideoPopup()">×</span>
+      <video controls autoplay muted loop>
+        <source src="your_ad_video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <h1>MP4 to MP3 Converter</h1>
+  <input type="file" id="inputFile" accept="video/mp4" />
+  <br />
+  <button id="convertBtn">Convert to MP3</button>
+  <div id="result"></div>
+  <div class="brought-by">Brought to you by YourBrand</div>
+
+  <div class="footer-ad">This is a Footer Ad</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js"></script>
+  <script>
+    // Show popup on page load
+    window.onload = function() {
+      document.getElementById('pageLoadPopup').style.display = 'flex';
+    };
+
+    function closePageLoadPopup() {
+      document.getElementById('pageLoadPopup').style.display = 'none';
+    }
+
+    function closeVideoPopup() {
+      const videoPopup = document.getElementById('videoPopup');
+      const video = videoPopup.querySelector('video');
+      video.pause();
+      videoPopup.style.display = 'none';
+    }
+
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
+    const inputFile = document.getElementById('inputFile');
+    const convertBtn = document.getElementById('convertBtn');
+    const resultDiv = document.getElementById('result');
+
+    convertBtn.addEventListener('click', async () => {
+      if (!inputFile.files.length) {
+        alert('Please select an MP4 file first.');
+        return;
+      }
+
+      // Show video ad popup on convert click
+      const videoPopup = document.getElementById('videoPopup');
+      videoPopup.style.display = 'flex';
+
+      const file = inputFile.files[0];
+      resultDiv.innerHTML = 'Loading ffmpeg-core.js, please wait...';
+
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
+
+      ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(file));
+
+      resultDiv.innerHTML = 'Converting... Please wait!';
+
+      await ffmpeg.run('-i', 'input.mp4', '-q:a', '0', '-map', 'a', 'output.mp3');
+
+      const data = ffmpeg.FS('readFile', 'output.mp3');
+
+      const mp3Blob = new Blob([data.buffer], { type: 'audio/mp3' });
+      const url = URL.createObjectURL(mp3Blob);
+
+      resultDiv.innerHTML = `<a href="${url}" download="converted.mp3">Download MP3</a>`;
+
+      // Hide video ad popup after conversion done
+      setTimeout(() => {
+        closeVideoPopup();
+      }, 5000); // close after 5 seconds, you can change
+    });
+  </script>
+</body>
+</html>

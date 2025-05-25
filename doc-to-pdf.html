@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doc to PDF Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar, .footer {
+      background: #4a90e2;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 60px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    input[type="file"] {
+      padding: 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .ad-popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .ad-content {
+      background: white;
+      padding: 20px;
+      width: 70%;
+      height: 70%;
+      text-align: center;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .banner-ad {
+      text-align: center;
+      background: lightblue;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+    .footer-ad {
+      text-align: center;
+      background: lightblue;
+      padding: 10px;
+    }
+    .result-ad {
+      margin-top: 15px;
+      background: #d1ecf1;
+      padding: 10px;
+      font-size: 14px;
+      color: #0c5460;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>Doc to PDF Converter</h2>
+  </div>
+
+  <div class="banner-ad">
+    Ad Banner Placeholder
+  </div>
+
+  <div class="container">
+    <h1>Select a DOC file</h1>
+    <input type="file" id="docFile" accept=".doc,.docx">
+    <button onclick="convertToPDF()">Convert to PDF</button>
+
+    <div class="result-ad">
+      Brought to you by Ad Placeholder
+    </div>
+  </div>
+
+  <div class="footer-ad">
+    Footer Ad Placeholder
+  </div>
+
+  <div class="footer">
+    <p>© 2025 Your Site Name</p>
+  </div>
+
+  <!-- Pop-up ad -->
+  <div class="ad-popup" id="adPopup">
+    <div class="ad-content">
+      <button class="close-btn" onclick="closeAd()">X</button>
+      <h2>Ad Pop-Up</h2>
+      <p>Your ad content here</p>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script>
+    // Pop-up ad logic
+    function closeAd() {
+      document.getElementById('adPopup').style.display = 'none';
+    }
+
+    function convertToPDF() {
+      const fileInput = document.getElementById('docFile');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Please select a DOC file');
+        return;
+      }
+
+      // Simulate PDF conversion logic
+      alert('PDF generated! Check your download folder.');
+      const link = document.createElement('a');
+      link.href = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'; // Placeholder PDF
+      link.download = 'converted.pdf';
+      link.click();
+
+      // Video ad logic
+      const videoAd = document.createElement('div');
+      videoAd.innerHTML = `
+        <video width="320" height="240" controls autoplay>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>`;
+      document.querySelector('.container').appendChild(videoAd);
+
+      setTimeout(() => {
+        videoAd.remove();
+      }, 10000); // Remove video ad after 10 seconds
+    }
+  </script>
+</body>
+</html>

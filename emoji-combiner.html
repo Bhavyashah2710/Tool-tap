@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emoji Combiner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      position: relative;
+      min-height: 100vh;
+      padding-top: 60px; /* for banner ad */
+      padding-bottom: 60px; /* for footer ad */
+      overflow-x: hidden;
+    }
+    /* Banner Ad */
+    .banner-ad {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 60px;
+      background: orange;
+      color: white;
+      font-weight: bold;
+      line-height: 60px;
+      z-index: 10000;
+      text-align: center;
+      font-size: 20px;
+      user-select: none;
+    }
+    /* Footer Ad */
+    .footer-ad {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 60px;
+      background: green;
+      color: white;
+      font-weight: bold;
+      line-height: 60px;
+      z-index: 10000;
+      text-align: center;
+      font-size: 20px;
+      user-select: none;
+    }
+
+    /* Popup Ad (Page Load) */
+    .popup-ad-simple {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex; /* visible on load */
+      justify-content: center; 
+      align-items: center;
+      z-index: 11000;
+    }
+    .popup-simple-content {
+      background: white;
+      padding: 20px;
+      width: 300px; height: 300px;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Popup Ad (Video on Combine) */
+    .popup-ad-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: none; /* hidden initially */
+      justify-content: center; 
+      align-items: center;
+      z-index: 12000;
+    }
+    .popup-video-content {
+      background: white;
+      padding: 20px;
+      width: 80%; height: 75%;
+      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .tool-container {
+      margin: 50px auto;
+      max-width: 500px;
+      position: relative;
+      z-index: 1; /* below popups */
+    }
+    .emoji-input {
+      font-size: 2rem;
+      padding: 10px;
+      margin: 10px;
+      width: 60px;
+      text-align: center;
+    }
+    .combine-btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    .result {
+      margin-top: 20px;
+      min-height: 140px;
+    }
+    .result img {
+      width: 128px;
+      height: 128px;
+    }
+    .brought-by {
+      font-size: 14px;
+      color: grey;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner-ad">This is a Banner Ad</div>
+
+  <div class="tool-container">
+    <h1>Emoji Combiner</h1>
+    <input type="text" class="emoji-input" placeholder="😀" id="emoji1" maxlength="2" />
+    <input type="text" class="emoji-input" placeholder="😎" id="emoji2" maxlength="2" />
+    <br/>
+    <button class="combine-btn" onclick="combineEmojis()">Combine</button>
+    <div class="result" id="resultArea"></div>
+    <div class="brought-by">Brought to you by YourBrand</div>
+  </div>
+
+  <div class="footer-ad">This is a Footer Ad</div>
+
+  <!-- Popup Ad Simple (Page Load) -->
+  <div class="popup-ad-simple" id="popupAdSimple">
+    <div class="popup-simple-content">
+      <span class="close-btn" onclick="closeSimplePopup()">×</span>
+      <h2>Welcome to Emoji Combiner!</h2>
+      <p>Enjoy combining emojis with cool combos.</p>
+      <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" alt="Ad Image" width="150" />
+    </div>
+  </div>
+
+  <!-- Popup Ad Video (On Combine) -->
+  <div class="popup-ad-video" id="popupAdVideo">
+    <div class="popup-video-content">
+      <span class="close-btn" onclick="closeVideoPopup()">×</span>
+      <video width="100%" height="100%" controls autoplay loop muted>
+        <source src="your_ad_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <script>
+    function closeSimplePopup() {
+      document.getElementById('popupAdSimple').style.display = 'none';
+    }
+    function closeVideoPopup() {
+      document.getElementById('popupAdVideo').style.display = 'none';
+    }
+
+    function combineEmojis() {
+      // Show video popup on Combine click
+      document.getElementById('popupAdVideo').style.display = 'flex';
+
+      const emoji1 = document.getElementById('emoji1').value.trim();
+      const emoji2 = document.getElementById('emoji2').value.trim();
+      const resultDiv = document.getElementById('resultArea');
+      resultDiv.innerHTML = '';
+
+      if (!emoji1 || !emoji2) {
+        resultDiv.textContent = 'Please enter two emojis.';
+        return;
+      }
+
+      const codePoint = (emoji) => {
+        return emoji.codePointAt(0).toString(16);
+      };
+
+      const cp1 = codePoint(emoji1);
+      const cp2 = codePoint(emoji2);
+
+      const url = `https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u${cp1}/u${cp1}_u${cp2}.png`;
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = `${emoji1} + ${emoji2}`;
+      img.onerror = () => {
+        resultDiv.textContent = 'Combination not available.';
+      };
+      resultDiv.appendChild(img);
+    }
+
+    // On page load popup (simple ad) is already visible by default (display:flex in CSS)
+  </script>
+
+</body>
+</html>

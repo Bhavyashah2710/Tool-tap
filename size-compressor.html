@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Size Compressor</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f8ff;
+    }
+    .popup-ad {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%; height: 75%;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    header {
+      background: #00bfff;
+      padding: 15px;
+      text-align: center;
+      color: #fff;
+      font-size: 24px;
+    }
+    .tool-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .footer-ad {
+      background: #f5f5f5;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    .blur-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: url('https://via.placeholder.com/600x400');
+      background-size: cover;
+      filter: blur(5px);
+      z-index: -1;
+      opacity: 0.3;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background: #00bfff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="popup-ad" id="popupAd">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()">X</span>
+    <h2>Advertisement</h2>
+    <p>Your ad content here. Replace this with your actual ad or poster.</p>
+  </div>
+</div>
+
+<header>
+  Top Banner Ad Placeholder
+</header>
+
+<div class="blur-bg"></div>
+
+<div class="tool-container">
+  <h2>Size Compressor</h2>
+  <input type="file" id="fileInput" />
+  <button class="btn" onclick="compress()">Compress</button>
+  <div class="result" id="result">
+    <p>Brought to you by [Your Brand]</p>
+  </div>
+</div>
+
+<div class="footer-ad">
+  Footer Ad Placeholder
+</div>
+
+<script>
+  function closePopup() {
+    document.getElementById('popupAd').style.display = 'none';
+  }
+
+  function compress() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput.files.length) {
+      alert('Please select a file!');
+      return;
+    }
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = "<p>Compression complete! Download link here (placeholder)</p>";
+
+    // Placeholder for video ad (use an actual ad player)
+    const videoAd = document.createElement('div');
+    videoAd.innerHTML = `
+      <video width="300" controls autoplay>
+        <source src="your-ad.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
+    resultDiv.appendChild(videoAd);
+
+    setTimeout(() => {
+      videoAd.style.display = 'none';
+    }, 5000); // Hide ad after 5 seconds
+  }
+</script>
+
+</body>
+</html>
